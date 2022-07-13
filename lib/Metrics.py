@@ -4,6 +4,7 @@ from tensorflow import keras
 
 # Keras Metric class computing the FID. Requires Tensorflow Eager Execution!
 class FrechetInceptionDistance(keras.metrics.Metric):
+    default_preprocess_fn = keras.applications.inception_v3.preprocess_input
     
     def load_default_model(shape=(299, 299, 3)):
         return keras.applications.InceptionV3(include_top=False, 

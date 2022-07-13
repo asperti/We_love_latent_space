@@ -291,12 +291,12 @@ def create(input_shape=(64, 64, 3), latent_dim=64, verbose=True, print_mode=Fals
                            
     """Recoder"""
     if 'recoder_args' in kwargs:
-        n_layers = kwargs['recoder_args']['n_layers']
-        base_filters_n = kwargs['recoder_args']['base_filters_n']
-        filters_multiplier = kwargs['recoder_args']['filters_multiplier']
-        stride = kwargs['recoder_args']['stride']
-        kernel_size = kwargs['recoder_args']['kernel_size']
-        extra_dense = kwargs['recoder_args']['extra_dense']
+        n_layers = 3 if 'n_layers' not in kwargs['recoder_args'] else kwargs['recoder_args']['n_layers']
+        base_filters_n = 128 if 'base_filters_n' not in kwargs['recoder_args'] else kwargs['recoder_args']['base_filters_n']
+        filters_multiplier = 2 if 'filters_multiplier' not in kwargs['recoder_args'] else kwargs['recoder_args']['filters_multiplier']
+        stride = 2 if 'stride' not in kwargs['recoder_args'] else kwargs['recoder_args']['stride']
+        kernel_size = 4 if 'kernel_size' not in kwargs['recoder_args'] else kwargs['recoder_args']['kernel_size']
+        extra_dense = False if 'extra_dense' not in kwargs['recoder_args'] else kwargs['recoder_args']['extra_dense']
     else:
         n_layers = 3
         base_filters_n = 128
@@ -304,7 +304,7 @@ def create(input_shape=(64, 64, 3), latent_dim=64, verbose=True, print_mode=Fals
         stride = 2
         kernel_size = 4
         extra_dense = False
-
+        
     recoder_list = [
         (keras.Input, {'shape':input_shape}, 'in')
     ]
@@ -321,7 +321,7 @@ def create(input_shape=(64, 64, 3), latent_dim=64, verbose=True, print_mode=Fals
     ])
     if extra_dense:
         recoder_list.extend([
-            (layers.Dense, {'units': latent_dim}, 'x', 'x'),
+            (layers.Dense, {'units': 4*latent_dim}, 'x', 'x'),
             (layers.LeakyReLU, {'alpha':0.2}, 'x', 'x'),
             (layers.Dense, {'units': latent_dim}, 'x', 'out')
         ])
