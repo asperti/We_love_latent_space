@@ -43,25 +43,21 @@ def show_images_3(imgs1,imgs2,imgs3):
 
 def choose_model(classname,name):
     if classname=='VAE':
-        latent_dim = 64
-        VAEencoder, VAEdecoder = VAE.create(latent_dim=latent_dim)
-        model_name = name #'VAE64D1' etc.
-        vae_filepath = os.path.join('./', 'models', 'VAEs', model_name+'_model',model_name)
-        vae = VAE.load(vae_filepath,latent_dim) #,VAEencoder,VAEdecoder)
+        model_name = name
+        model_filepath = os.path.join('./', 'models', 'VAEs', model_name + '_model', model_name)
+        vae = VAE.load(model_filepath)
         def vae_encoder(imgs):
-          z_mean, _, _ = VAEencoder(imgs)
-          return z_mean 
-        return vae_encoder,VAEdecoder
+          z_mean, _, _ = vae.encoder(imgs)
+          return z_mean
+        return vae_encoder,vae.decoder
     elif classname=='GAN':
-        latent_dim = 64
-        GANdiscriminator, GANgenerator, GANrecoder = GAN.create(latent_dim=latent_dim)
-        model_name = name #'GAN64D1' etc.
-        gan_filepath_fwd = os.path.join('./','models', 'GANs', model_name+'_model', 'forward', model_name)
-        gan_filepath_bck = os.path.join('./', 'models', 'GANs', model_name+'_model', 'backward', model_name)
+        model_name = name
+        model_filepath_fwd = os.path.join('./', 'models', 'GANs', model_name + '_model', 'forward', model_name)
+        model_filepath_bck = os.path.join('./', 'models', 'GANs', model_name + '_model', 'backward', model_name)
 
-        gan = GAN.load(gan_filepath_fwd)
-        igan = GAN.load_inverse(gan_filepath_bck)
-        return igan.recoder,gan.generatorcd
+        gan = GAN.load(model_filepath_fwd)
+        igan = GAN.load_inverse(model_filepath_bck, gan)
+        return igan.recoder,gan.generator
     elif classname=='SVAE':
         svae,encoder,decoder,through_latent,emb_generator = split.get_model('celeba')
         model_name = name #'one', 'two' or 'three'
@@ -82,10 +78,11 @@ def choose_model(classname,name):
            return generated
         return svae_encoder,svae_decoder
     elif classname=='StyleGAN':
-        latent_dim = stylegan.latent_dim
+        recoder_from_w = True
+        recoder_attempt_name = name
         model_filepath_fwd = os.path.join(os.getcwd(), 'models', 'Downloaded','StyleGAN_model', 'forward', 'Generator')
         model_filepath_bck = os.path.join(os.getcwd(), 'models', 'Downloaded', 'StyleGAN_model',
-                                  'backward_' + ('from_w_' if from_w else '') + recoder_attempt_name, 'StyleGAN_CelebAHQ')
+                                  'backward_' + ('from_w_' if recoder_from_w else '') + recoder_attempt_name, 'StyleGAN_CelebAHQ')
         stylegan = StyleGAN.load(model_filepath_fwd)
         igan = GAN.load_inverse(model_filepath_bck, stylegan)
             
@@ -138,7 +135,7 @@ def transform_with_support(sourceclass,sourcename, #e.g. 'SVAE','one'
     return A,enc1,dec1,enc2,dec2
 
 def transform_from_W(otherclass,othername,otherlatent_dim,direction):
-    recoder,generator = choose_model('StyleGAN',None)
+    recoder,generator = choose_model('StyleGAN','a')
     otherenc,otherdec = choose_model(sourceclass,sourcename)
     
     direction = 'fromStyleGAn'  #'ToStyleGan
