@@ -4,3 +4,5 @@ Repository relative to the article "Comparing the latent space of generative mod
 In this work we
 address the more general problem of comparing the latent spaces of different models,
 looking for transformations between them. 
+
+<p align="center"><img src="mapping.png" /><p>
