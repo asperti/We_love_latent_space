@@ -2,7 +2,7 @@
 Repository relative to the article <a href="https://arxiv.org/abs/2207.06812">Comparing the latent space of generative models</a>, joint work with Valerio Tonelli
 
 In this work we
-address the more general problem of comparing the latent spaces of different models,
+address the problem of comparing the latent spaces of different models,
 looking for transformations between them. 
 
 <p align="center"><img src="mapping.png" width="500"/><p>
