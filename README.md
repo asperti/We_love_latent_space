@@ -26,5 +26,7 @@ In all cases, a linear map is enough to pass from a space to another preserving 
 
 Some examples are provided below:
 
-
+<p align="center"><img src="space1.png" width="500"/><p>
+<p align="center"><img src="space_type2.png" width="500"/><p>
+<p align="center"><img src="space_type3.png" width="500"/><p>
 
