@@ -18,9 +18,9 @@ excellent results, in many situations. This is quite surprising, given that both
 functions are modeled by deep, non-linear transformations.
 
 We tested mapping between latent spaces of:
-- different training of a same model (Type 1)
+- different trainings of a same model (Type 1)
 - different generative models in a same class, e.g different VAEs (Type2)
-- generative models with different learning obkectives, e.g. GAN vs. VAE (Type3)
+- generative models with different learning objectives, e.g. GAN vs. VAE (Type3)
 
 In all cases, a linear map is enough to pass from a space to another preserving most of the information.
 
